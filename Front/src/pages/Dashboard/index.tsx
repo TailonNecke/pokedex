@@ -61,7 +61,6 @@ const Dashboard: React.FC = () => {
                 <span>| {p.type.name } |</span>
               ))}</p>
             </div>
-
             <FiChevronRight size={20} />
 
           </a>

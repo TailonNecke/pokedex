@@ -108,12 +108,6 @@ export const Repositories = styled.div`
     span {
       float: right;
     }
-    FiChevronRight {
-      whidth: 32px;
-      height: 32px;
-      margin-right: 10px;
-    }
-
 
   }
   `;
