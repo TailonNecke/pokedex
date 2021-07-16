@@ -1,6 +1,6 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
-import { isConditionalExpression } from 'typescript';
+import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 
@@ -22,9 +22,25 @@ interface Repository {
   }
 const Dashboard: React.FC = () => {
   const [newRepo, setNewRepo] = useState('');
-  const [repositories, setRepotories] = useState<Repository[]>([]);
   const [inputError, setInputError] = useState('');
   const [Tipo, setType] = useState<Tipo[]>([]);
+  const [repositories, setRepotories] = useState<Repository[]>(() => {
+    const storageRepository = localStorage.getItem(
+      '@GithubExplorer:repositories'
+    );
+    if(storageRepository){
+      return JSON.parse(storageRepository)
+    }
+
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      '@GithubExplorer:repositories',
+      JSON.stringify(repositories)
+    )
+  }, [repositories]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
@@ -69,7 +85,7 @@ const Dashboard: React.FC = () => {
       <Repositories>
         {repositories.map(repository => (
 
-          <a key={repository.name} href={"https://www.pokemon.com/br/pokedex/" + repository.id}>
+          <Link key={repository.name} to={`/repository/${repository.name}`}>
           <img src={repository.sprites.front_default} />
             <div>
               <strong>Nome: {repository.name}</strong>
@@ -78,9 +94,13 @@ const Dashboard: React.FC = () => {
                 <span>| {p.type.name } |</span>
               ))}</p>
             </div>
+
+
             <FiChevronRight size={20} />
 
-          </a>
+
+
+          </Link>
         ))}
 
       </Repositories>

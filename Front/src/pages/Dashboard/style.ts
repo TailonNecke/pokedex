@@ -122,7 +122,9 @@ export const Repositories = styled.div`
     span {
       float: right;
     }
-
+    svg {
+      margin-left: auto;
+    }
   }
   `;
 
