@@ -1,9 +1,10 @@
 import React, { useState, FormEvent } from 'react';
 import { FiChevronRight } from 'react-icons/fi';
+import { isConditionalExpression } from 'typescript';
 import api from '../../services/api';
 
 
-import { Title, Repositories, Form } from './style';
+import { Title, Repositories, Form, Error } from './style';
 
 interface Repository {
   sprites:{
@@ -21,17 +22,30 @@ interface Repository {
 const Dashboard: React.FC = () => {
   const [newRepo, setNewRepo] = useState('');
   const [repositories, setRepotories] = useState<Repository[]>([]);
+  const [inputError, setInputError] = useState('');
   const [Tipo, setType] = useState<Tipo[]>([]);
 
   async function handleAddRepository(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
 
-    const response = await api.get<Repository>(`${newRepo}`);
-    const repository = response.data;
+    if(!newRepo){
+      setInputError("Digite um usuário/Repositório para pesquisar.");
+      return;
+    }
 
-    setRepotories([...repositories, repository]);
-    setType(repository.types);
-    setNewRepo('');
+    try{
+      const response = await api.get<Repository>(`${newRepo}`);
+      const repository = response.data;
+
+      setRepotories([...repositories, repository]);
+      setType(repository.types);
+      setNewRepo('');
+      setInputError('');
+
+    }catch(err) {
+      setInputError("Repositorio não encontrado ou inexistente.");
+    }
+
   }
 
   return(
@@ -39,7 +53,7 @@ const Dashboard: React.FC = () => {
     <>
       <Title>Pokédex</Title>
 
-      <Form onSubmit={handleAddRepository}>
+      <Form hasError={!!inputError} onSubmit={handleAddRepository}>
         <input
           value={newRepo}
           onChange={e => setNewRepo(e.target.value)}
@@ -48,6 +62,8 @@ const Dashboard: React.FC = () => {
 
         <button type="submit">Pesquisar</button>
       </Form>
+
+      {inputError && <Error>{inputError}</Error>}
 
       <Repositories>
         {repositories.map(repository => (
