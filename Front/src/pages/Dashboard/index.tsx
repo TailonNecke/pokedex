@@ -12,6 +12,7 @@ interface Repository {
   };
   name: string;
   types: Tipo[];
+  id: string;
   };
 
   interface Tipo {
@@ -68,7 +69,7 @@ const Dashboard: React.FC = () => {
       <Repositories>
         {repositories.map(repository => (
 
-          <a key={repository.name} href="teste">
+          <a key={repository.name} href={"https://www.pokemon.com/br/pokedex/" + repository.id}>
           <img src={repository.sprites.front_default} />
             <div>
               <strong>Nome: {repository.name}</strong>
