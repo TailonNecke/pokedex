@@ -85,7 +85,7 @@ const Dashboard: React.FC = () => {
       <Repositories>
         {repositories.map(repository => (
 
-          <Link key={repository.name} to={`/repository/${repository.name}`}>
+          <a href={`https://www.pokemon.com/br/pokedex/${repository.id}`}>
           <img src={repository.sprites.front_default} />
             <div>
               <strong>Nome: {repository.name}</strong>
@@ -100,7 +100,7 @@ const Dashboard: React.FC = () => {
 
 
 
-          </Link>
+          </a>
         ))}
 
       </Repositories>
